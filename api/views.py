@@ -6,6 +6,7 @@ from .models import File
 from .models import FileHistory
 from .models import PageNumberPagination
 from .serializers import UserSerializer
+from .serializers import UserNonAdminSerializer
 from .serializers import AddressSerializer
 from .serializers import FileSerializer
 from .serializers import FileHistorySerializer
@@ -28,28 +29,39 @@ class UserViewSet(viewsets.ModelViewSet):
         q = Q()
 
         qs = super().get_queryset()
-
-        # filtro por código
-        if 'codigo' in self.request.GET:
-            q &= Q(id=int(self.request.GET['codigo']))
-
-        if 'código' in self.request.GET:
-            q &= Q(id=int(self.request.GET['código']))
         # filtro por nomeIsAuthenticated
         if 'nome' in self.request.GET:
             q &= Q(nome__icontains=self.request.GET['nome'])
 
         # filtro por funcao
-        if 'status' in self.request.GET:
-            if self.request.GET['status'].lower() in "sim":
-                q |= Q(is_active=True)
-            if self.request.GET['status'].lower() in "nao":
-                q |= Q(is_active=False)
+        if 'email' in self.request.GET:
+            q &= Q(email__icontains=self.request.GET['email'])
 
-        if 'ativo' in self.request.GET:
+        if 'active' in self.request.GET:
             q &= Q(is_active__icontains=self.request.GET['ativo'])
 
+        if 'guestUsers' in self.request.GET:
+            q &= Q(is_staff=False)
+
         return qs.filter(q)
+
+
+class UserNonAdministratorViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.filter(is_staff=False)
+    serializer_class = UserNonAdminSerializer
+
+    def get_queryset(self):
+
+        q = Q()
+
+        qs = super().get_queryset()
+        # filtro por nomeIsAuthenticated
+        if 'nome' in self.request.GET:
+            q &= Q(nome__icontains=self.request.GET['nome'])
+
+
+        return qs.filter(q)
+
 
 
 class AddressViewSet(viewsets.ModelViewSet):

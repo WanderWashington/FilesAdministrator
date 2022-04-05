@@ -16,9 +16,11 @@ class FileValidator(object):
      'size_limit': "File size limit exceded",
     }
 
+
     def __init__(self, max_size=None, min_size=None):
         self.max_size = max_size
         self.min_size = min_size
+
 
     def __call__(self, data):
         if self.max_size is not None and data.size > self.max_size:

@@ -24,9 +24,13 @@ from rest_framework.permissions import IsAuthenticated
 
 router = routers.DefaultRouter()
 router.register('address', views.AddressViewSet)
-router.register('user', views.UserViewSet)
 router.register('fileUpload', views.FileViewSet)
 router.register('fileUploadHistory', views.FileHistoryViewSet)
+
+router.register(r'user', views.UserViewSet, basename='users')
+router.register(r'guestUser', views.UserNonAdministratorViewSet, basename='guests')
+
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

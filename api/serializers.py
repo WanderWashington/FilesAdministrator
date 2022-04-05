@@ -58,6 +58,28 @@ class UserSerializer(serializers.ModelSerializer):
 		return user
 
 
+class UserNonAdminSerializer(serializers.ModelSerializer):
+	addresses = AddressSerializer(many=False, required=False)
+
+	class Meta:
+		model = User
+		fields = ('id',  'nome', 'email', 'password', 'addresses')
+		read_only_fields = ['date_joined']
+
+		extra_kwargs = {
+			'email': {
+				'validators':[UnicodeUsernameValidator()]
+			}
+		}
+
+	def create(self, validated_data):
+		addresses_data = validated_data.pop('addresses')
+		user = User.objects.create_user(**validated_data)
+		if addresses_data:
+			Address.objects.create(user=user, **addresses_data)
+
+		return user
+
 
 class FileHistorySerializer(serializers.ModelSerializer):
 	class Meta:
