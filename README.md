@@ -30,19 +30,22 @@ After apply the migrations, we have to create a super user.
 With a super user created, now is just run the application, running the following command:
 ```python manage.py runserver```
 
+### Endpoints:
 
-### Endpoints
-  
-  /admin/
-  /api/
-  /api/users
-  /api/address
-  /api/fileUpload
-  /api/fileUploadHistory
-  /api/guestUser
- 
+      /admin/
+      /api/
+      /api/users/
+      /api/address/
+      /api/fileUpload/
+      /api/fileUploadHistory/
+      /api/guestUser/ 
+
 ### Search parameter:
+
 To search by name of user:
-  /users/?nome=test
+
+      /api/users/?nome=test
+      
 To search by users non administrator/guest:
-  /users/?guestUsers
+
+      /users/?guestUsers
