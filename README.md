@@ -49,3 +49,5 @@ To search by name of user:
 To search by users non administrator/guest:
 
       /users/?guestUsers
+      
+Just the guestUser endpoint is public. The others are private
